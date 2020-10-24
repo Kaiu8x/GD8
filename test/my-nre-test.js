@@ -1,28 +1,38 @@
 const assert = require('assert');
 
 describe('A series of tests for VectorCalculator object', () => {
-  let vectA = {x: 1, y: 2}
-  let vectB = {x: 2, y: 1}
-  let vcalc = new VectorCalculator()
+  
   it('should sum two vectors', () => {
+    let vectA = {x: 1, y: 2}
+    let vectB = {x: 2, y: 1}
+    let vcalc = new VectorCalculator()
     let resVect = {x: 3, y:3}
-    assert.strictEqual(resVect, vcalc.sum(vectA, vectB));
+    assert.deepStrictEqual(resVect, vcalc.sum(vectA, vectB));
   })
 
   it('should sub two vectors', () => {
+    let vectA = {x: 1, y: 2}
+    let vectB = {x: 2, y: 1}
+    let vcalc = new VectorCalculator()
     let resVect = {x: -1, y:1}
-    assert.strictEqual(resVect, vcalc.sub(vectA, vectB));
+    assert.deepStrictEqual(resVect, vcalc.sub(vectA, vectB));
   })
 
   it('should multiply by scalar', () => {
+    let vectA = {x: 1, y: 2}
+    let vectB = {x: 2, y: 1}
+    let vcalc = new VectorCalculator()
     let xScal = 2
     let resVect = {x: 2, y:4}
-    assert.strictEqual(resVect, vcalc.sub(vectA, xScal));
+    assert.deepStrictEqual(resVect, vcalc.scalar(vectA, xScal));
   })
 
   it('should dot prod two vectors', () => {
+    let vectA = {x: 1, y: 2}
+    let vectB = {x: 2, y: 1}
+    let vcalc = new VectorCalculator()
     let res = 4
-    assert.strictEqual(res, vcalc.dot(vectA, vectB));
+    assert.deepStrictEqual(res, vcalc.dot(vectA, vectB));
   })
 })
 
@@ -42,7 +52,7 @@ describe('A series of tests for BankAccount object', () => {
 
   it('should substract and return current ammount', () => {
     let bankAccountA = new BankAccount(3.0, ["op1", "op2"])
-    let res = 3.0
+    let res = 1.0
     bankAccountA.substract(2.0)
     assert.strictEqual(res, bankAccountA.current());
   })
@@ -53,31 +63,31 @@ describe('A series of tests for BankAccount object', () => {
     let mergedAccountRes = new BankAccount(-2.0, ["op1", "op2", "op3", "op4"])
     bankAccountA.merge(bankAccountB)
     assert.strictEqual(mergedAccountRes.current(), bankAccountA.current())
-    assert.strictEqual(mergedAccountRes.historial(), bankAccountA.historial());
+    assert.deepStrictEqual(mergedAccountRes.history(), bankAccountA.history());
   })
 
   it('should return historial', () => {
     let bankAccountA = new BankAccount(3.0, ["op1", "op2"])
-    let res = ["op1", "op3"]
-    assert.strictEqual(res, bankAccountA.historial());
+    let res = ["op1", "op2"]
+    assert.deepStrictEqual(res, bankAccountA.history());
   })
 })
 
 class VectorCalculator {
   sum(a,b) {
-    return 0;
+    return {x: a.x + b.x, y: a.y + b.y};
   }
 
   sub(a,b) {
-    return 0;
+    return {x: a.x - b.x, y: a.y - b.y};
   }
 
   scalar(a, x) {
-    return "vector";
+    return {x: a.x * x, y: a.y * x};
   }
 
   dot(a, b) {
-    return 0;
+    return a.x * b.x + a.y * b.y;
   }
 }
 
@@ -88,22 +98,25 @@ class BankAccount {
   }
 
   current() {
-    return 0.0;
+    return this.saldoActual;
   }
 
   append(amount) {
-    return 0.0;
+    this.saldoActual += amount
+    return this.saldoActual;
   }
 
   substract(amount) {
-    return 0.0;
+    this.saldoActual -= amount
+    return this.saldoActual;
   }
 
   merge(account) {
-    
+    this.saldoActual += account.saldoActual
+    this.historial = this.historial.concat(account.historial);
   }
 
   history() {
-    return [{}];
+    return this.historial;
   }
 }
